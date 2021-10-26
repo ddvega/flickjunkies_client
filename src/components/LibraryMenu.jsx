@@ -6,6 +6,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import Save from '@mui/icons-material/Save';
+
 // props = libraries
 export const LibraryMenu = ({ libraries }) => {
   const handleClick = (value, popupState) => {
@@ -16,8 +18,8 @@ export const LibraryMenu = ({ libraries }) => {
     <PopupState variant="popover" popupId="demo-popup-menu">
       {(popupState) => (
         <>
-          <IconButton {...bindTrigger(popupState)} style={{ color: '#01BBC9', transform: 'scale(3)' }}>
-            <FileDownloadIcon />
+          <IconButton {...bindTrigger(popupState)} style={{ color: '#01BBC9', transform: 'scale(2)' }}>
+            <Save />
           </IconButton>
 
           <Menu {...bindMenu(popupState)}>

@@ -69,37 +69,28 @@ export const useStyles = () => {
       },
     },
     appBarSpacer: theme.mixins.toolbar,
-    content: {
-      flexGrow: 1,
-      height: '100vh',
-      width: '80vh',
+    discover_box: {
+      height: '30vh',
+      width: '25vh',
+      overflow: 'hidden',
+      color: theme.palette.background.dark,
+      backgroundColor: 'white',
+    },
+    searchButton: {
       overflow: 'auto',
+      color: theme.palette.background.dark,
+      backgroundColor: theme.palette.primary.text,
+      marginTop: '2vh',
     },
     container: {
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(4),
     },
-    paper: {
+    main: {
       padding: theme.spacing(1),
-      display: 'flex',
-      overflow: 'auto',
-      flexDirection: 'column',
       color: theme.palette.primary.text,
       backgroundColor: theme.palette.background.dark,
-    },
-    summary: {
-      padding: theme.spacing(1),
-      overflow: 'auto',
-      color: theme.palette.primary.text,
-      backgroundColor: theme.palette.background.dark,
-      height: '100vh',
-    },
-    paper2: {
-      padding: theme.spacing(2),
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'auto',
-      alignItems: 'center',
+      height: '95vh',
     },
 
     fixedHeight: {
@@ -108,16 +99,6 @@ export const useStyles = () => {
     avatar: {
       margin: theme.spacing(1),
       backgroundColor: theme.palette.secondary.main,
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(3),
-    },
-    image: {
-      maxWidth: '100%',
     },
   }));
 

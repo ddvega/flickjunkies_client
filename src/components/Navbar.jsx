@@ -36,9 +36,9 @@ export const Navbar = () => {
   const itemsCommon = [
     {
       id: '0',
-      route: '/gameplay',
+      route: '/Discover',
       icon: <VisibilityIcon />,
-      text: 'Start Training',
+      text: 'Find Movies',
     },
   ];
 
