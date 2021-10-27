@@ -22,7 +22,7 @@ import { useStyles } from '../styles/navbarStyles';
 export const Navbar = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
 
   // handle opening and closing of app drawer
   const drawerOpen = () => {
@@ -33,14 +33,14 @@ export const Navbar = () => {
     setOpen(false);
   };
 
-  const itemsCommon = [
-    {
-      id: '0',
-      route: '/Discover',
-      icon: <VisibilityIcon />,
-      text: 'Find Movies',
-    },
-  ];
+  // const itemsCommon = [
+  //   {
+  //     id: '0',
+  //     route: '/Discover',
+  //     icon: <VisibilityIcon />,
+  //     text: 'Find Movies',
+  //   },
+  // ];
 
   const itemsLoggedIn = [
     {
@@ -55,13 +55,7 @@ export const Navbar = () => {
       icon: <LockOpenIcon />,
       text: 'Profile',
     },
-    {
-      id: '3',
-      route: '/',
-      icon: <CreateIcon />,
-      text: 'Create',
-    },
-    ...itemsCommon,
+    // ...itemsCommon,
   ];
 
   const itemsLoggedOut = [
@@ -84,7 +78,7 @@ export const Navbar = () => {
       text: 'Reset Password',
     },
 
-    ...itemsCommon,
+    // ...itemsCommon,
   ];
 
   return (
@@ -102,6 +96,9 @@ export const Navbar = () => {
           <Typography className={classes.title} variant="h6" noWrap>
             FLICKJUNKIES
           </Typography>
+
+          {isAuthenticated && <img src={user.picture} alt="" style={{ height: 25, width: 25 }} />}
+          {/* {isAuthenticated && <Typography>{user.email}</Typography>} */}
 
           <IconButton
             edge="end"
@@ -131,9 +128,9 @@ export const Navbar = () => {
         <Divider />
 
         {isAuthenticated ? (
-          <Navlist drawer={drawerClose} items={itemsLoggedIn} />
+          <Navlist drawerClose={drawerClose} items={itemsLoggedIn} />
         ) : (
-          <Navlist drawer={drawerClose} items={itemsLoggedOut} />
+          <Navlist drawerClose={drawerClose} items={itemsLoggedOut} />
         )}
       </Drawer>
     </>

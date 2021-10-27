@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { Button, Typography, Container, Grid, IconButton } from '@material-ui/core';
+import { Button, Typography, Container, Grid, IconButton, List, ListItem } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import UndoIcon from '@mui/icons-material/Undo';
@@ -23,13 +23,17 @@ const printGenres = (genreArray) => {
   return genreString.replace(/..$/, '.');
 };
 
+const convertYearToDate = (date) => {
+  return date.slice(0, 4);
+};
+
 export const MovieSummary = ({ movie, showSummary }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.summary}>
-      <Grid container spacing={1}>
-        <Grid item xs={8}>
+    <>
+      <Grid container>
+        <Grid item xs={9}>
           <Container maxWidth="xs">
             <img
               width="100%"
@@ -40,19 +44,46 @@ export const MovieSummary = ({ movie, showSummary }) => {
             />
           </Container>
         </Grid>
-        <Grid item xs={4}>
-          <Typography variant="h2" className={classes.rating}>
-            {movie.vote_average}
-          </Typography>
-
-          <Typography variant="h6" className={classes.rating}>
-            {movie.release_date}
-          </Typography>
-          <Typography variant="h6" className={classes.rating}>
-            {convertIdToLanguage(movie.original_language)}
-          </Typography>
-
-          <LibraryMenu libraries={libs} />
+        <Grid item xs={3}>
+          <List>
+            <ListItem>
+              <Typography variant="caption" className={styles.summary_title}>
+                Score:
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <Typography variant="body1" className={classes.rating}>
+                {movie.vote_average}
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <Typography variant="caption" className={styles.summary_title}>
+                Votes
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <Typography variant="body1">{movie.vote_count}</Typography>
+            </ListItem>
+            <ListItem>
+              <Typography variant="caption" className={styles.summary_title}>
+                Year
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <Typography variant="body1">{convertYearToDate(movie.release_date)}</Typography>
+            </ListItem>
+            <ListItem>
+              <Typography variant="caption" className={styles.summary_title}>
+                Language
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <Typography variant="body1">{convertIdToLanguage(movie.original_language)}</Typography>
+            </ListItem>
+            <ListItem>
+              <LibraryMenu libraries={libs} />
+            </ListItem>
+          </List>
         </Grid>
       </Grid>
       <Typography className={styles.summary_title}>GENRES</Typography>
@@ -69,6 +100,6 @@ export const MovieSummary = ({ movie, showSummary }) => {
           </IconButton>
         </Grid>
       </Grid>
-    </div>
+    </>
   );
 };

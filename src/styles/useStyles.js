@@ -69,18 +69,21 @@ export const useStyles = () => {
       },
     },
     appBarSpacer: theme.mixins.toolbar,
-    discover_box: {
-      height: '30vh',
-      width: '25vh',
-      overflow: 'hidden',
-      color: theme.palette.background.dark,
-      backgroundColor: 'white',
+    libraryContainer: {
+      height: '70vh',
+    },
+    libraryTable: {
+      height: '60vh',
     },
     searchButton: {
       overflow: 'auto',
       color: theme.palette.background.dark,
       backgroundColor: theme.palette.primary.text,
       marginTop: '2vh',
+    },
+    searchIcon: {
+      color: theme.palette.primary.title,
+      transform: 'scale(1.5)',
     },
     container: {
       paddingTop: theme.spacing(4),

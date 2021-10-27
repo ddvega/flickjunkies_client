@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { CssBaseline } from '@material-ui/core';
-
+import { MovieProvider } from './store/MovieProvider';
 import { Home } from './screens/Home';
 import { Users } from './screens/Users';
 import { Navbar } from './components/Navbar';
@@ -20,13 +20,15 @@ export const Router = () => {
           redirectUri={process.env.REACT_APP_REDIRECT}
         >
           <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Navbar />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/users" component={Users} />
-              <Route path="/account" component={Account} />
-            </Switch>
+            <MovieProvider>
+              <CssBaseline />
+              <Navbar />
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route path="/users" component={Users} />
+                <Route path="/account" component={Account} />
+              </Switch>
+            </MovieProvider>
           </ThemeProvider>
         </Auth0Provider>
       </>

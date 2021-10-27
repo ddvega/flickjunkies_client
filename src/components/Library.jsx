@@ -5,6 +5,8 @@ import MaterialTable, { MTableToolbar } from 'material-table';
 import { Container, Modal, MenuItem, Select, Grid, Typography, Button, Switch } from '@material-ui/core';
 import { Save } from '@material-ui/icons';
 import ScreenSearchDesktopIcon from '@mui/icons-material/ScreenSearchDesktop';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import SearchIcon from '@mui/icons-material/Search';
 import { LibraryMenu } from './LibraryMenu';
 import { MovieSummary } from './MovieSummary';
 import { MovieModal } from './MovieModal';
@@ -12,90 +14,56 @@ import { useStyles } from '../styles/useStyles';
 import { idToGenre } from '../helpers/genres';
 import { convertIdToLanguage } from '../helpers/languages';
 import tmdbLogo from '../icons/tmdb.svg';
+import { useMovieProvider } from '../store/MovieProvider';
 
 const libs = [
   { id: '995', name: 'Horror' },
   { id: '234', name: 'Action' },
   { id: '237', name: 'Drama' },
 ];
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
-export const Library = ({ movies, title, toggleDiscover }) => {
+export const Library = ({ movies, currentList }) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const { showTable, setShowTable } = useMovieProvider();
+  // const [open, setOpen] = useState(false);
   const [movie, setMovie] = useState(null);
+  const tableHeight = '82vh';
 
-  const handleClick = (rowData) => {
+  const handleRowClick = (rowData) => {
     console.log(rowData);
     setMovie(rowData);
-    setOpen(true);
+    // setOpen(true);
+    setShowTable(false);
   };
 
   const showSummary = () => {
-    setOpen(false);
+    // setOpen(false);
+    setShowTable(true);
   };
 
   return (
     <>
-      {open ? (
+      {!showTable ? (
         <MovieSummary movie={movie} showSummary={showSummary} />
       ) : (
         <>
-          <Container>
-            <Grid container alignItems="center" direction="row" justify="center" width="10vh">
-              <Grid item xs={0}>
-                <Typography variant="body2"> Find</Typography>
-              </Grid>
-              <Grid item xs={0}>
-                <Button onClick={toggleDiscover}>
-                  <img src={tmdbLogo} alt="" />
-                </Button>
-              </Grid>
-              <Grid item xs={0}>
-                <Typography variant="body2"> Movies</Typography>
+          <Container className={classes.libraryContainer}>
+            <Grid container alignItems="center" direction="column">
+              <Grid item xs={12}>
+                <Typography variant="caption">{currentList}</Typography>
               </Grid>
             </Grid>
 
             <MaterialTable
               onRowClick={(event, rowData) => {
-                handleClick(rowData);
-              }}
-              actions={[
-                {
-                  icon: () => (
-                    <>
-                      <Typography variant="caption"> Search</Typography>
-                      <Button onClick={toggleDiscover}>
-                        <img src={tmdbLogo} alt="" />
-                      </Button>
-                    </>
-                  ),
-                  tooltip: 'Search TMDB',
-                  isFreeAction: true,
-                },
-              ]}
-              components={{
-                Toolbar: (props) => (
-                  <div style={{ backgroundColor: '#e8eaf5' }}>
-                    <MTableToolbar {...props} />
-                  </div>
-                ),
+                handleRowClick(rowData);
               }}
               options={{
                 filtering: false,
+                showTitle: false,
                 paging: false,
                 sorting: true,
-                maxBodyHeight: '85vh',
+                maxBodyHeight: tableHeight,
                 actionsColumnIndex: -1,
                 search: false,
                 searchFieldAlignment: 'left',
@@ -104,14 +72,9 @@ export const Library = ({ movies, title, toggleDiscover }) => {
                 toolbar: false,
               }}
               columns={[
-                // { title: 'LANGUAGE', render: (rowData) => convertIdToLanguage(rowData.original_language) },
-                // {
-                //   title: 'GENRE',
-                //   render: (rowData) => idToGenre(rowData.genre_ids[0]),
-                // },
-                { title: 'DATE', field: 'release_date' },
-                { title: 'TITLE', field: 'title' },
-                { title: 'RATING', field: 'vote_average', type: 'numeric' },
+                { title: 'DATE', field: 'release_date', type: 'date', align: 'left' },
+                { title: 'TITLE', field: 'title', type: 'string', align: 'left' },
+                { title: 'SCORE', field: 'vote_average', type: 'numeric', align: 'center' },
               ]}
               data={movies}
             />
