@@ -18,8 +18,9 @@ const libs = [
 
 const printGenres = (genreArray) => {
   let genreString = '';
+  // genreArray.map((genre) => (genreString += `${idToGenre(genre)}, `));
   // eslint-disable-next-line no-return-assign
-  genreArray.map((genre) => (genreString += `${idToGenre(genre)}, `));
+  genreArray.map((genre) => (genreString += `${genre.name}, `));
   return genreString.replace(/..$/, '.');
 };
 
@@ -78,7 +79,7 @@ export const MovieSummary = ({ movie, showSummary }) => {
               </Typography>
             </ListItem>
             <ListItem>
-              <Typography variant="body1">{convertIdToLanguage(movie.original_language)}</Typography>
+              <Typography variant="body1">{convertIdToLanguage(movie.language.languageName)}</Typography>
             </ListItem>
             <ListItem>
               <LibraryMenu libraries={libs} />
@@ -88,7 +89,7 @@ export const MovieSummary = ({ movie, showSummary }) => {
       </Grid>
       <Typography className={styles.summary_title}>GENRES</Typography>
 
-      <Typography>{printGenres(movie.genre_ids)}</Typography>
+      <Typography>{printGenres(movie.genres)}</Typography>
 
       <Typography className={styles.summary_title}>OVERVIEW</Typography>
 
