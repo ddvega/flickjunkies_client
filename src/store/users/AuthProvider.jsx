@@ -15,8 +15,8 @@ export function AuthProvider({ children }) {
   // const api = useAPI();
   const [token, setToken] = useState(() => getLocalStorage('token', ''));
   const [isAuthenticated, setIsAuthenticated] = useState(() => getLocalStorage('isAuthenticated', 'false'));
-  const [username, setUsername] = useState(() => getLocalStorage('username', ''));
-  const [password, setPassword] = useState(() => getLocalStorage('password', ''));
+  // const [username, setUsername] = useState(() => getLocalStorage('username', ''));
+  // const [password, setPassword] = useState(() => getLocalStorage('password', ''));
   //   const [token, setToken] = useState('');
   //   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -31,29 +31,16 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    setLocalStorage('username', username);
-    setLocalStorage('password', password);
+    // setLocalStorage('username', username);
+    // setLocalStorage('password', password);
     setLocalStorage('token', token);
     setLocalStorage('isAuthenticated', isAuthenticated);
-  }, [token, isAuthenticated, username, password]);
+  }, [token, isAuthenticated]);
 
-  const login = async (u, p) => {
-    setUsername(u);
-    setPassword(p);
+  const login = async (username, password) => {
+    // setUsername(u);
+    // setPassword(p);
     // console.log(`username: ${u} password: ${p}`);
-    const userObject = { username: u, password: p };
-    const getJwt = await axios.post(`${process.env.REACT_APP_API_URL}/authenticate`, userObject, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-    setToken(getJwt.data.jwtToken);
-    // const getJwt = await api.post('/authenticate', userObject);
-    // setLoading(false);
-    // setToken(getJwt.data.jwtToken);
-    setIsAuthenticated('true');
-    // return getJwt.data.jwtToken;
-  };
-
-  const refreshToken = async () => {
     const userObject = { username, password };
     const getJwt = await axios.post(`${process.env.REACT_APP_API_URL}/authenticate`, userObject, {
       headers: { 'Content-Type': 'application/json' },
@@ -66,7 +53,14 @@ export function AuthProvider({ children }) {
     // return getJwt.data.jwtToken;
   };
 
-  const value = { token, isAuthenticated, login, refreshToken };
+  const logout = () => {
+    // setLocalStorage('token', '');
+    // setLocalStorage('isAuthenticated', 'false');
+    setToken('');
+    setIsAuthenticated('false');
+  };
+
+  const value = { token, isAuthenticated, login, logout, setToken, setIsAuthenticated };
 
   return <UserContext.Provider value={value}>{!loading && children}</UserContext.Provider>;
 }

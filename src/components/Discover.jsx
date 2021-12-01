@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth0 } from '@auth0/auth0-react';
+// import { useAuth0 } from '@auth0/auth0-react';
 import {
   Button,
   Container,
@@ -20,26 +20,28 @@ import {
 } from '@material-ui/core';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 // import DatePicker from '@mui/lab/DatePicker';
+import { useHistory } from 'react-router';
 import { Profile } from './Profile';
 import { useStyles } from '../styles/useStyles';
-import { Login } from '../screens/Login';
-import { Library } from './Library';
+// import { LoginButton } from './LoginButton';
+// import { Library } from './Library';
 import { genreId, idGenre, genreToId } from '../helpers/genres';
 import { convertLanguageToId, languageId } from '../helpers/languages';
-import { MovieSummary } from './MovieSummary';
-import { yearMap } from '../helpers/years';
+// import { MovieSummary } from './MovieSummary';
+// import { yearMap } from '../helpers/years';
 import { useMovieProvider } from '../store/MovieProvider';
 
 const ratingParams = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10];
 
 export const Discover = ({ drawerClose, closeSearch }) => {
   const classes = useStyles();
-  const { isAuthenticated } = useAuth0();
-  const { movies, moviesUpdate, allUserAddedMovies, setCurrentList, setShowTable } = useMovieProvider();
+  const history = useHistory();
+  // const { isAuthenticated } = useAuth0();
+  const { setSearch, searchTMDB } = useMovieProvider();
   // const [movies, setMovies] = useState(null);
   const [genre, setGenre] = useState('');
   const [language, setLanguage] = useState('');
-  const [search, setSearch] = useState(null);
+  // const [search, setSearch] = useState(null);
   const [actor, setActor] = useState('');
   const [minScore, setMinScore] = useState('');
   const [maxScore, setMaxScore] = useState('');
@@ -47,24 +49,28 @@ export const Discover = ({ drawerClose, closeSearch }) => {
   const [maxYear, setMaxYear] = useState('');
   const [title, setTitle] = useState('');
 
-  const buildSearchTitle = () => {
-    let searchTitle = '';
-    Object.values(search).map((param) => (searchTitle = `${searchTitle} ${param}`));
-    return searchTitle;
-  };
+  // const buildSearchTitle = () => {
+  //   let searchTitle = '';
+  //   Object.values(search).map((param) => (searchTitle = `${searchTitle} ${param}`));
+  //   return searchTitle;
+  // };
 
-  const searchTMDB = async () => {
-    const searchJSON = JSON.stringify(search);
-    setCurrentList(buildSearchTitle());
-    const movie = await axios.post(`${process.env.REACT_APP_API_URL}/movie/search`, searchJSON, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-    console.log(movie.data);
-    setShowTable(true);
+  // const searchTMDB = async () => {
+  //   const searchJSON = JSON.stringify(search);
+  //   setCurrentList(buildSearchTitle());
+  //   const movie = await axios.post(`${process.env.REACT_APP_API_URL}/movie/search`, searchJSON, {
+  //     headers: { 'Content-Type': 'application/json' },
+  //   });
+  //   console.log(movie.data);
+  //   setShowTable(true);
+  //   drawerClose();
+  //   moviesUpdate(movie.data);
+  // };
+  const handleSearch = () => {
+    searchTMDB();
     drawerClose();
-    moviesUpdate(movie.data);
+    history.push('/library/tmdb');
   };
-
   // update search parameters as they are changed by user
   useEffect(() => {
     const searchObject = {};
@@ -85,6 +91,12 @@ export const Discover = ({ drawerClose, closeSearch }) => {
     }
     if (title) {
       searchObject['title'] = title;
+    }
+    if (minYear) {
+      searchObject['date_min'] = maxScore;
+    }
+    if (maxYear) {
+      searchObject['date_max'] = title;
     }
     console.log(searchObject);
     setSearch(searchObject);
@@ -185,7 +197,7 @@ export const Discover = ({ drawerClose, closeSearch }) => {
         <ListItem>
           <Grid container alignItems="center" direction="column">
             <Grid item xs={12}>
-              <Button onClick={searchTMDB} variant="outlined" className={classes.searchButton}>
+              <Button onClick={handleSearch} variant="outlined" className={classes.searchButton}>
                 Search
               </Button>
             </Grid>

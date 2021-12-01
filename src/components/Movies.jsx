@@ -22,7 +22,7 @@ const libs = [
   { id: '237', name: 'Drama' },
 ];
 
-export const Library = ({ movies, currentList }) => {
+export const Movies = ({ movies, libraryName }) => {
   const classes = useStyles();
   const { showTable, setShowTable } = useMovieProvider();
   // const [open, setOpen] = useState(false);
@@ -50,7 +50,7 @@ export const Library = ({ movies, currentList }) => {
           <Container className={classes.libraryContainer}>
             <Grid container alignItems="center" direction="column">
               <Grid item xs={12}>
-                <Typography variant="caption">{currentList}</Typography>
+                <Typography variant="caption">{libraryName}</Typography>
               </Grid>
             </Grid>
 

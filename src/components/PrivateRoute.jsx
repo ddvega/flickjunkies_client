@@ -7,12 +7,13 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 // import AuthService from './Services/AuthService';
-import { useUserProvider } from '../store/users/UserProvider';
+// import { useUserProvider } from '../store/users/UserProvider';
+import { useAuthProvider } from '../store/users/AuthProvider';
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {
   // Add your own authentication on the below line.
   // const isLoggedIn = AuthService.isLoggedIn();
-  const { isAuthenticated } = useUserProvider();
+  const { isAuthenticated } = useAuthProvider();
 
   return (
     <Route

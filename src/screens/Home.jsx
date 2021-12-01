@@ -1,56 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router';
-import axios from 'axios';
-import { useAuth0 } from '@auth0/auth0-react';
-import { Button, Container, CssBaseline } from '@material-ui/core';
-import { Profile } from '../components/Profile';
 import { useStyles } from '../styles/useStyles';
 // import { LoginButton } from '../components/Login';
-import { Library } from '../components/Library';
-import { Discover } from '../components/Discover';
-import { Login } from './Login';
-import { useMovieProvider } from '../store/MovieProvider';
+import { Libraries } from '../components/Libraries';
 import { useAuthProvider } from '../store/users/AuthProvider';
+import { useAPI } from '../api/api';
 
 export const Home = () => {
   const classes = useStyles();
-  const { movies, moviesUpdate, allUserAddedMovies, currentList, setCurrentList } = useMovieProvider();
-  const { isAuthenticated } = useAuthProvider();
-  // const { isAuthenticated } = useAuth0();
-  // const [movies, setMovies] = useState([]);
-  // const [discover, setDiscover] = useState(false);
-  // const title = 'User Added Movies';
-
-  // const getAllUserMovies = async () => {
-  //   const movie = await axios.get(`${process.env.REACT_APP_API_URL}/movie`);
-  //   console.log(movie.data);
-  //   // setMovies(movie.data);
-  //   moviesUpdate(movie.data);
-  // };
-
-  // const toggleDiscover = () => setDiscover((value) => !value);
-  // const openDiscover = () => setDiscover(true);
-  // const closeDiscover = () => setDiscover(false);
+  const api = useAPI();
+  // const { movies, moviesUpdate, allUserAddedMovies, currentList, setCurrentList } = useMovieProvider();
+  const [libraries, setLibraries] = useState(null);
+  const auth = useAuthProvider();
 
   // when page is refreshed, add all movies added by users
-  useEffect(() => {
-    // console.log(`Auth status: ${isAuthenticated}`);
-    if (isAuthenticated === 'true') {
-      console.log('useEffect working');
-      allUserAddedMovies();
-      setCurrentList('All User Added Movies');
-    }
+  useEffect(async () => {
+    const libs = await api.get('/library/all');
+    console.log(libs.data);
+    setLibraries(libs.data);
   }, []);
+
   return (
     <>
-      {isAuthenticated === 'false' ? (
-        <Redirect to="/Login" />
-      ) : (
-        <div className={classes.main}>
-          {/* {discover && <Discover />} */}
-          {movies && <Library movies={movies} currentList={currentList} />}
-        </div>
-      )}
+      <div className={classes.main}>
+        {libraries && <Libraries libraries={libraries} currentList="User Libraries" />}
+      </div>
     </>
   );
 };

@@ -18,11 +18,13 @@ import { useAuth0 } from '@auth0/auth0-react';
 import logo from '../icons/blueMovie.png';
 import { Navlist } from './Navlist';
 import { useStyles } from '../styles/navbarStyles';
+import { useAuthProvider } from '../store/users/AuthProvider';
 
 export const Navbar = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const { isAuthenticated, user } = useAuth0();
+  // const { isAuthenticated, user } = useAuth0();
+  const auth = useAuthProvider();
 
   // handle opening and closing of app drawer
   const drawerOpen = () => {
@@ -97,7 +99,7 @@ export const Navbar = () => {
             FLICKJUNKIES
           </Typography>
 
-          {isAuthenticated && <img src={user.picture} alt="" style={{ height: 25, width: 25 }} />}
+          {/* {isAuthenticated && <img src={user.picture} alt="" style={{ height: 25, width: 25 }} />} */}
           {/* {isAuthenticated && <Typography>{user.email}</Typography>} */}
 
           <IconButton
@@ -127,7 +129,7 @@ export const Navbar = () => {
         </div>
         <Divider />
 
-        {isAuthenticated ? (
+        {auth.isAuthenticated === 'true' ? (
           <Navlist drawerClose={drawerClose} items={itemsLoggedIn} />
         ) : (
           <Navlist drawerClose={drawerClose} items={itemsLoggedOut} />

@@ -10,9 +10,9 @@ import { Navbar } from './components/Navbar';
 import { theme } from './styles/theme';
 import { Account } from './screens/Account';
 // import { UserProvider } from './store/UserProvider';
-import { Login } from './screens/Login';
+import { LoginButton } from './components/Login';
 import { PrivateRoute } from './components/PrivateRoute';
-import { UserProvider } from './store/users/UserProvider';
+import { Library } from './screens/Library';
 
 export const Router = () => {
   return (
@@ -24,8 +24,8 @@ export const Router = () => {
             <Navbar />
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route path="/login" component={Login} />
-              <Route path="/test" component={Users} />
+              <Route path="/account" component={Account} />
+              <Route path="/library/:id" component={Library} />
             </Switch>
           </MovieProvider>
         </ThemeProvider>
