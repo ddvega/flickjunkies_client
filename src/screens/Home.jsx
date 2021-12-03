@@ -1,28 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useStyles } from '../styles/useStyles';
 // import { LoginButton } from '../components/Login';
 import { Libraries } from '../components/Libraries';
-import { useAuthProvider } from '../store/users/AuthProvider';
-import { useAPI } from '../api/api';
+import { useMovieProvider } from '../store/MovieProvider';
 
 export const Home = () => {
   const classes = useStyles();
-  const api = useAPI();
-  // const { movies, moviesUpdate, allUserAddedMovies, currentList, setCurrentList } = useMovieProvider();
-  const [libraries, setLibraries] = useState(null);
-  const auth = useAuthProvider();
-
-  // when page is refreshed, add all movies added by users
-  useEffect(async () => {
-    const libs = await api.get('/library/all');
-    console.log(libs.data);
-    setLibraries(libs.data);
-  }, []);
+  const { allLibraries } = useMovieProvider();
 
   return (
     <>
       <div className={classes.main}>
-        {libraries && <Libraries libraries={libraries} currentList="User Libraries" />}
+        {allLibraries && <Libraries libraries={JSON.parse(allLibraries)} currentList="User Libraries" />}
       </div>
     </>
   );

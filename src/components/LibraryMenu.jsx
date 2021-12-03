@@ -26,7 +26,7 @@ export const LibraryMenu = ({ libraries }) => {
             {libraries.map((library) => (
               <MenuItem
                 onClick={() => {
-                  handleClick(library.id, popupState);
+                  handleClick(library.libraryId, popupState);
                 }}
               >
                 {library.name}

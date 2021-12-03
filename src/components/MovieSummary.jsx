@@ -9,16 +9,10 @@ import { LibraryMenu } from './LibraryMenu';
 import { idToGenre } from '../helpers/genres';
 import { convertIdToLanguage } from '../helpers/languages';
 import styles from '../styles/style.module.css';
-
-const libs = [
-  { id: '995', name: 'Horror' },
-  { id: '234', name: 'Action' },
-  { id: '237', name: 'Drama' },
-];
+import { useMovieProvider } from '../store/MovieProvider';
 
 const printGenres = (genreArray) => {
   let genreString = '';
-  // genreArray.map((genre) => (genreString += `${idToGenre(genre)}, `));
   // eslint-disable-next-line no-return-assign
   genreArray.map((genre) => (genreString += `${genre.name}, `));
   return genreString.replace(/..$/, '.');
@@ -30,7 +24,7 @@ const convertYearToDate = (date) => {
 
 export const MovieSummary = ({ movie, showSummary }) => {
   const classes = useStyles();
-
+  const { allLibraries } = useMovieProvider();
   return (
     <>
       <Grid container>
@@ -82,7 +76,7 @@ export const MovieSummary = ({ movie, showSummary }) => {
               <Typography variant="body1">{convertIdToLanguage(movie.language.languageName)}</Typography>
             </ListItem>
             <ListItem>
-              <LibraryMenu libraries={libs} />
+              <LibraryMenu libraries={JSON.parse(allLibraries)} />
             </ListItem>
           </List>
         </Grid>

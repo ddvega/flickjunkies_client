@@ -1,8 +1,10 @@
 /* eslint-disable no-return-assign */
-import React, { useContext, useState, createContext } from 'react';
+import React, { useContext, useState, createContext, useEffect } from 'react';
+import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
-import { useAPI } from '../api/api';
+import { useAPI, apiRequest } from '../api/api';
 import { useAuthProvider } from './users/AuthProvider';
+import { setLocalStorage, getLocalStorage } from '../helpers/localStorage';
 
 const MovieContext = createContext();
 
@@ -13,28 +15,32 @@ export const useMovieProvider = () => {
 export const MovieProvider = ({ children }) => {
   const api = useAPI();
   const auth = useAuthProvider();
+  const history = useHistory();
   const [libraryData, setLibraryData] = useState(null);
   const [movies, setMovies] = useState(null);
   const [libraryName, setLibraryName] = useState(null);
   const [showTable, setShowTable] = useState(true);
   const [search, setSearch] = useState('');
+  const [allLibraries, setAllLibraries] = useState(null);
+
+  useEffect(() => {
+    setLocalStorage('allLibraries', allLibraries);
+  }, [allLibraries]);
 
   const moviesUpdate = (arrayMovieObjects) => {
     setMovies(arrayMovieObjects);
   };
 
-  const allUserAddedMovies = async () => {
+  const allUserMovies = async () => {
     try {
-      const movie = await api.get('/movie');
+      const movie = await api.get('/movie/all');
       console.log(movie);
       setMovies(movie.data);
       setLibraryName('All User Movies');
     } catch (error) {
       if (error.response && error.response.status === 403) {
-        auth.setToken('');
-        auth.setIsAuthenticated('');
-        window.location.reload();
-        alert('session expired');
+        auth.logout();
+        history.push('/account');
       }
     }
   };
@@ -46,17 +52,10 @@ export const MovieProvider = ({ children }) => {
   };
 
   const searchTMDB = async () => {
-    const searchJSON = JSON.stringify(search);
-    console.log(`search=${searchJSON}`);
     setLibraryName(buildSearchTitle());
     const movie = await api.post('/movie/tmdb', search);
-    // const movie = await axios.post(`${process.env.REACT_APP_API_URL}/movie/search`, searchJSON, {
-    //   headers: { 'Content-Type': 'application/json' },
-    // });
     console.log(movie.data);
     setShowTable(true);
-    // drawerClose();
-    // moviesUpdate(movie.data);
     setMovies(movie.data);
   };
 
@@ -64,21 +63,34 @@ export const MovieProvider = ({ children }) => {
     console.log(`library id is: ${id}`);
     const lib = await api.get(`/library/id/${id}`);
     setLibraryData(lib.data);
-    console.log(lib.data.movies);
   };
+
+  const updateLibraries = async () => {
+    // console.log(`library id is: ${id}`);
+    const lib = await api.get('/library/all');
+    setAllLibraries(JSON.stringify(lib.data));
+    // setUserLibraries(lib.data);
+    // setLibraryData(lib.data);
+  };
+
+  useEffect(() => {
+    updateLibraries();
+  }, []);
 
   const value = {
     movies,
     libraryData,
     libraryName,
     showTable,
+    allLibraries,
     moviesUpdate,
-    allUserAddedMovies,
+    allUserMovies,
     setShowTable,
     getLibraryById,
     setLibraryData,
     setSearch,
     searchTMDB,
+    updateLibraries,
   };
   return <MovieContext.Provider value={value}>{children}</MovieContext.Provider>;
 };

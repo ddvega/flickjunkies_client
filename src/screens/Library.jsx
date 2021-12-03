@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect, useParams } from 'react-router';
+import { Redirect, useHistory, useParams } from 'react-router';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button, Container, CssBaseline } from '@material-ui/core';
@@ -15,13 +15,18 @@ import { useAuthProvider } from '../store/users/AuthProvider';
 import { useAPI } from '../api/api';
 
 export const Library = () => {
+  const history = useHistory();
   const classes = useStyles();
   const { id } = useParams();
   // const api = useAPI();
-  const { libraryData, getLibraryById, movies, libraryName } = useMovieProvider();
+  const { libraryData, getLibraryById, movies, libraryName, allUserMovies } = useMovieProvider();
 
   useEffect(() => {
-    if (id !== 'tmdb') {
+    if (id === 'movies') {
+      allUserMovies();
+    } else if (id === 'all') {
+      history.push('/');
+    } else if (id !== 'tmdb') {
       getLibraryById(id);
     }
   }, []);
@@ -29,7 +34,7 @@ export const Library = () => {
   return (
     <>
       <div className={classes.main}>
-        {id === 'tmdb'
+        {id === 'tmdb' || id === 'movies'
           ? movies && <Movies movies={movies} libraryName={libraryName} />
           : libraryData && <Movies movies={libraryData.movies} libraryName={libraryData.name} />}
       </div>
