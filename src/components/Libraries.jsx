@@ -2,7 +2,7 @@
 import React from 'react';
 import MaterialTable from 'material-table';
 import { Container, Grid, Typography } from '@material-ui/core';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { useStyles } from '../styles/useStyles';
 
 export const Libraries = (children) => {

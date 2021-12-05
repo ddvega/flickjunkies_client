@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable no-return-assign */
 import React, { useContext, useState, createContext, useEffect } from 'react';
 import { useHistory } from 'react-router';
@@ -16,16 +17,13 @@ export const MovieProvider = ({ children }) => {
   const api = useAPI();
   const auth = useAuthProvider();
   const history = useHistory();
-  const [libraryData, setLibraryData] = useState(null);
   const [movies, setMovies] = useState(null);
   const [libraryName, setLibraryName] = useState(null);
+  const [libraryData, setLibraryData] = useState(null);
   const [showTable, setShowTable] = useState(true);
   const [search, setSearch] = useState('');
   const [allLibraries, setAllLibraries] = useState(null);
-
-  useEffect(() => {
-    setLocalStorage('allLibraries', allLibraries);
-  }, [allLibraries]);
+  const [userLibraries, setUserLibraries] = useState(() => getLocalStorage('userLibraries', []));
 
   const moviesUpdate = (arrayMovieObjects) => {
     setMovies(arrayMovieObjects);
@@ -59,38 +57,49 @@ export const MovieProvider = ({ children }) => {
     setMovies(movie.data);
   };
 
+  const filterUserLibraries = (libs) => {
+    const userLib = [];
+    libs.map((library) => {
+      if (library.username === auth.user) {
+        userLib.push(library);
+      }
+    });
+    setUserLibraries(JSON.stringify(userLib));
+  };
+
+  const getAllLibraries = async () => {
+    const lib = await api.get('/library/all');
+    setAllLibraries(lib.data);
+    if (lib.data) {
+      filterUserLibraries(lib.data);
+    }
+  };
+
   const getLibraryById = async (id) => {
     console.log(`library id is: ${id}`);
     const lib = await api.get(`/library/id/${id}`);
     setLibraryData(lib.data);
-  };
-
-  const updateLibraries = async () => {
-    // console.log(`library id is: ${id}`);
-    const lib = await api.get('/library/all');
-    setAllLibraries(JSON.stringify(lib.data));
-    // setUserLibraries(lib.data);
-    // setLibraryData(lib.data);
+    // setMovies(lib.data);
   };
 
   useEffect(() => {
-    updateLibraries();
-  }, []);
+    setLocalStorage('userLibraries', userLibraries);
+  }, [userLibraries]);
 
   const value = {
     movies,
-    libraryData,
     libraryName,
     showTable,
     allLibraries,
+    userLibraries,
+    libraryData,
     moviesUpdate,
     allUserMovies,
     setShowTable,
-    getLibraryById,
-    setLibraryData,
     setSearch,
     searchTMDB,
-    updateLibraries,
+    getAllLibraries,
+    getLibraryById,
   };
   return <MovieContext.Provider value={value}>{children}</MovieContext.Provider>;
 };

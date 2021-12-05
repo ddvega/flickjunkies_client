@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => getLocalStorage('token', ''));
   const [isAuthenticated, setIsAuthenticated] = useState(() => getLocalStorage('isAuthenticated', 'false'));
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => getLocalStorage('username', ''));
 
   useEffect(() => {
     setLoading(false);
@@ -23,8 +23,8 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     setLocalStorage('token', token);
     setLocalStorage('isAuthenticated', isAuthenticated);
-    setLocalStorage('user', user);
-  }, [token, isAuthenticated]);
+    setLocalStorage('username', user);
+  }, [token, isAuthenticated, user]);
 
   const login = async (username, password) => {
     const userObject = { username, password };
@@ -33,13 +33,14 @@ export function AuthProvider({ children }) {
     });
     setToken(getJwt.data.jwtToken);
     setIsAuthenticated('true');
+    console.log(`User type is: ${typeof (username)}`);
     setUser(username);
   };
 
   const logout = () => {
     setToken('');
     setIsAuthenticated('false');
-    setUser(null);
+    setUser('');
   };
 
   const value = { token, isAuthenticated, login, logout, setToken, setIsAuthenticated, user };
