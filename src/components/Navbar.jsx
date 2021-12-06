@@ -22,9 +22,9 @@ import { useAuthProvider } from '../store/users/AuthProvider';
 
 export const Navbar = () => {
   const classes = useStyles();
+  const auth = useAuthProvider();
   const [open, setOpen] = useState(false);
   // const { isAuthenticated, user } = useAuth0();
-  const auth = useAuthProvider();
 
   // handle opening and closing of app drawer
   const drawerOpen = () => {
@@ -35,18 +35,25 @@ export const Navbar = () => {
     setOpen(false);
   };
 
-  // const itemsCommon = [
-  //   {
-  //     id: '0',
-  //     route: '/Discover',
-  //     icon: <VisibilityIcon />,
-  //     text: 'Find Movies',
-  //   },
-  // ];
+  const itemsCommon = [
+    {
+      id: '0',
+      route: '/',
+      icon: <VisibilityIcon />,
+      text: 'All Libraries',
+    },
+  ];
 
   const itemsLoggedIn = [
+    ...itemsCommon,
     {
       id: '1',
+      route: '/user',
+      icon: <LockOpenIcon />,
+      text: `${auth.user} collection`,
+    },
+    {
+      id: '3',
       route: '/account',
       icon: <AccountCircleIcon />,
       text: 'Log Out',
@@ -57,10 +64,10 @@ export const Navbar = () => {
       icon: <LockOpenIcon />,
       text: 'Profile',
     },
-    // ...itemsCommon,
   ];
 
   const itemsLoggedOut = [
+    ...itemsCommon,
     {
       id: '4',
       route: '/account',
@@ -79,8 +86,6 @@ export const Navbar = () => {
       icon: <LockOpenIcon />,
       text: 'Reset Password',
     },
-
-    // ...itemsCommon,
   ];
 
   return (

@@ -22,18 +22,18 @@ export const Navlist = (props) => {
     <>
       {!openSearch ? (
         <List>
-          {props.items.map((field) => (
-            <ListItem button component={Link} to={field.route} onClick={props.drawerClose} key={field.id}>
-              <ListItemIcon>{field.icon}</ListItemIcon>
-              <ListItemText primary={field.text} />
-            </ListItem>
-          ))}
           <ListItem button onClick={toggleSearch}>
             <ListItemIcon>
               <VisibilityIcon />
             </ListItemIcon>
             <ListItemText primary="Discover Movies" />
           </ListItem>
+          {props.items.map((field) => (
+            <ListItem button component={Link} to={field.route} onClick={props.drawerClose} key={field.id}>
+              <ListItemIcon>{field.icon}</ListItemIcon>
+              <ListItemText primary={field.text} />
+            </ListItem>
+          ))}
         </List>
       ) : (
         <List>

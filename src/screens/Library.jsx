@@ -14,7 +14,7 @@ export const Library = () => {
   const { id } = useParams();
   // const [libraryData, setLibraryData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { movies, libraryName, allUserMovies, getLibraryById, libraryData } = useMovieProvider();
+  const { movies, libraryName, allUserMovies, getLibraryById, libraryData, setShowTable } = useMovieProvider();
 
   // const getLibraryById = async () => {
   //   console.log(`library id is: ${id}`);
@@ -36,6 +36,7 @@ export const Library = () => {
       setLoading(false);
       console.log(`id=${id}`);
       console.log(`libraryData=${JSON.stringify(libraryData)}`);
+      setShowTable(true);
     } catch (error) {
       // setLoading(false);
       console.log(error);
@@ -43,15 +44,6 @@ export const Library = () => {
   }, []);
 
   return (
-    // <>
-    //   {loading ? (
-    //     <CircularProgress />
-    //   ) : (
-    //     <div className={classes.main}>
-    //       {libraryData && <Movies movies={libraryData.movies} libraryName={libraryData.name} />}
-    //     </div>
-    //   )}
-    // </>
     <>
       {loading ? (
         <CircularProgress />

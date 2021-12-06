@@ -13,6 +13,7 @@ import { Account } from './screens/Account';
 import { LoginButton } from './components/Login';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Library } from './screens/Library';
+import { UserCollection } from './screens/UserCollection';
 
 export const Router = () => {
   return (
@@ -24,6 +25,7 @@ export const Router = () => {
             <Navbar />
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route path="/user" component={UserCollection} />
               <Route path="/account" component={Account} />
               <Route path="/library/:id" component={Library} />
             </Switch>

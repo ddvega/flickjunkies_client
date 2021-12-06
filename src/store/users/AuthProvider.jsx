@@ -35,6 +35,7 @@ export function AuthProvider({ children }) {
     setIsAuthenticated('true');
     console.log(`User type is: ${typeof (username)}`);
     setUser(username);
+    window.location.reload();
   };
 
   const logout = () => {

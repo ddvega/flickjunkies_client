@@ -68,10 +68,18 @@ export const MovieProvider = ({ children }) => {
   };
 
   const getAllLibraries = async () => {
-    const lib = await api.get('/library/all');
-    setAllLibraries(lib.data);
-    if (lib.data) {
-      filterUserLibraries(lib.data);
+    try {
+      const lib = await api.get('/library/all');
+      setAllLibraries(lib.data);
+      if (lib.data) {
+        filterUserLibraries(lib.data);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 403) {
+        auth.logout();
+        history.push('/');
+        window.location.reload();
+      }
     }
   };
 
@@ -100,6 +108,8 @@ export const MovieProvider = ({ children }) => {
     searchTMDB,
     getAllLibraries,
     getLibraryById,
+    setUserLibraries,
+    setAllLibraries,
   };
   return <MovieContext.Provider value={value}>{children}</MovieContext.Provider>;
 };
