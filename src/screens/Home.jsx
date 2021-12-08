@@ -10,7 +10,9 @@ export const Home = () => {
   console.log(allLibraries);
 
   useEffect(() => {
-    getAllLibraries();
+    if (!allLibraries) {
+      getAllLibraries();
+    }
   }, []);
 
   return (

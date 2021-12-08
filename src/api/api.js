@@ -10,6 +10,8 @@ export const useAPI = () => {
   if (auth.token) {
     instance.defaults.headers.common['Authorization'] = `Bearer ${auth.token}`;
     instance.defaults.headers.common['Content-Type'] = 'application/json';
+    instance.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+    instance.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
   }
 
   return instance;

@@ -23,7 +23,7 @@ export const MovieProvider = ({ children }) => {
   const [showTable, setShowTable] = useState(true);
   const [search, setSearch] = useState('');
   const [allLibraries, setAllLibraries] = useState(null);
-  const [userLibraries, setUserLibraries] = useState(() => getLocalStorage('userLibraries', []));
+  const [userLibraries, setUserLibraries] = useState(null);
 
   const moviesUpdate = (arrayMovieObjects) => {
     setMovies(arrayMovieObjects);
